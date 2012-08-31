@@ -1,8 +1,15 @@
-LDFLAGS=-lstdc++
-CXXFLAGS=-ggdb -I. -Iskia/core -Iskia/config
+CC=/Users/ehsanakhgari/moz/emscripten/emcc
+CXXFLAGS=-I. -Iskia/core -Iskia/config
 
+%.o: %.cpp
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $^ -o $@
 
-scale: skia/SkBitmap.o skia/SkMallocPixelRef.o skia/Sk64.o skia/SkUnPreMultiply.o skia/SkPixelRef.o scale.o convolver.o image_operations.o
+%.o: %.cc
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $^ -o $@
+
+scale.js: skia/SkBitmap.o skia/SkMallocPixelRef.o skia/Sk64.o skia/SkUnPreMultiply.o skia/SkPixelRef.o scale.o convolver.o image_operations.o
+	$(CC) $(LDFLAGS) $^ -o scale.bc
+	$(CC) -o scale.js scale.bc
 
 clean:
-	rm *.o skia/*.o
+	rm *.bc skia/*.o *.o

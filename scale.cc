@@ -43,8 +43,8 @@ SkString::SkString()
 SkString::~SkString()
 {};
 
-void
-SkPackBits::Unpack8(unsigned char*, unsigned long, unsigned long, unsigned char const*)
+void SkPackBits::Unpack8(uint8_t dst[], size_t dstSkip, size_t dstWrite,
+                    const uint8_t src[])
 {
 	assert(0);
 }

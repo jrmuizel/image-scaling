@@ -16,7 +16,6 @@
  * with the correct size to match the size of a pointer on a given platform.
  */
 #if (__clang_major__*1000 + __clang_minor__) >= 2009
-# define USE_NULLPTR
 #elif (__GNUC__*1000 + __GNU_MINOR__) >= 4006
 # define USE_NULLPTR
 #elif _MSC_VER >= 1600
@@ -31,7 +30,7 @@
 #else
 #  define nullptr 0L
 #endif
-#elif
+#else
 # undef USE_NULLPTR
 #endif
 
