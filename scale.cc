@@ -4,9 +4,10 @@
 #include "skia/core/SkPackBits.h"
 #include "skia/core/SkString.h"
 #include "image_operations.h"
+#include "scale.h"
 #include <assert.h>
-static bool
-Scale(uint8_t *src, int srcWidth, int srcHeight, uint8_t* dst, int dstWidth, int dstHeight)
+bool
+Scaler::Scale(uint8_t *src, int srcWidth, int srcHeight, uint8_t* dst, int dstWidth, int dstHeight)
 {
 
 	SkBitmap::Config config;
@@ -43,8 +44,8 @@ SkString::SkString()
 SkString::~SkString()
 {};
 
-void
-SkPackBits::Unpack8(unsigned char*, unsigned long, unsigned long, unsigned char const*)
+void SkPackBits::Unpack8(uint8_t dst[], size_t dstSkip, size_t dstWrite,
+                    const uint8_t src[])
 {
 	assert(0);
 }
@@ -99,9 +100,10 @@ int SkCLZ_portable(unsigned int)
 #include <stdlib.h>
 int main()
 {
-	uint8_t *src = (uint8_t*)malloc(100*100*4);
-	uint8_t *dst = (uint8_t*)malloc(25*25*4);
-	Scale(src, 100, 100, dst, 25, 25);
+	uint8_t *src = (uint8_t*)malloc(4000*4000*4);
+	uint8_t *dst = (uint8_t*)malloc(2000*2000*4);
+	Scaler s;
+        s.Scale(src, 4000, 4000, dst, 2000, 2000);
 
 }
 
