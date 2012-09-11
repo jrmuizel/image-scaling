@@ -42,10 +42,6 @@
 #    define nullptr 0L
 #  endif
 #else
-#  undef USE_NULLPTR
-#  define nullptr 0L
-#endif
-#else
 # undef USE_NULLPTR
 #endif
 

@@ -4,33 +4,37 @@
 #include "skia/core/SkPackBits.h"
 #include "skia/core/SkString.h"
 #include "image_operations.h"
-#include "scale.h"
 #include <assert.h>
-bool
-Scaler::Scale(uint8_t *src, int srcWidth, int srcHeight, uint8_t* dst, int dstWidth, int dstHeight)
+
+extern "C" {
+
+void
+Scale(uint8_t *src, int srcWidth, int srcHeight, uint8_t* dst, int dstWidth, int dstHeight)
 {
 
 	SkBitmap::Config config;
-	bool opaque;
+	bool opaque = true;
 
 
-		uint8_t* srcData;
 		uint32_t srcDataLength;
 		// Source frame data is locked/unlocked on the main thread.
 
-		uint8_t* dstData;
+		uint8_t* dstData = dst;
 		uint32_t dstDataLength;
 
 		SkBitmap imgSrc;
 		imgSrc.setConfig(SkBitmap::kARGB_8888_Config, srcWidth, srcHeight,
 				 srcWidth*4);
-		imgSrc.setPixels(srcData);
+		imgSrc.setPixels(src);
 		imgSrc.setIsOpaque(opaque);
+
 
 		// This returns an SkBitmap backed by dstData; since it wrote to dstData,
 		// we don't need to look at that SkBitmap.
 		skia::ImageOperations::Resize(imgSrc, skia::ImageOperations::RESIZE_BEST,
 					      dstWidth, dstHeight, dstData);
+
+}
 
 }
 void
@@ -96,15 +100,21 @@ int SkCLZ_portable(unsigned int)
 {
 	assert(0);
 }
-
 #include <stdlib.h>
-int main()
+int example()
 {
 	uint8_t *src = (uint8_t*)malloc(4000*4000*4);
-	uint8_t *dst = (uint8_t*)malloc(2000*2000*4);
-	Scaler s;
-        s.Scale(src, 4000, 4000, dst, 2000, 2000);
-
+        uint8_t *dst = (uint8_t*)malloc(2000*2000*4);
+	for (int y=0; y<4000; y++) {
+	for (int x=0; x<4000; x++) {
+		src[y*4000*4+x*4] = 0xff;
+		src[y*4000*4+x*4+1] = x;
+		src[y*4000*4+x*4+2] = y;
+		src[y*4000*4+x*4+3] = 0xff;
+	}
+	}
+	Scale(src, 4000, 4000, dst, 2000, 2000);
+	
 }
 
 
