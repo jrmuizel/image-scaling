@@ -1,5 +1,6 @@
 <script src="main.js"></script>
 <script src="scale.js"></script>
+Image scaling test<br>
 <script>
 function scale() {
 	var canvas1 = document.getElementById("canvas1");
@@ -39,8 +40,10 @@ function scale() {
 </script>
 
 <input type="file" id="input" onchange="handleFiles(this.files, 1)"/>
-<button onclick="scale()">scale</button>
+<button onclick="scale()">Scale</button>
 <div id="view">
+	<br>
+2000x1328 result:
 <canvas style="border:solid" width="2000" height="1328" id="canvasout">
 </canvas>
 <canvas width="640" height="480" id="canvas1">
