@@ -25,15 +25,3 @@ function handleFiles(files, id) {
 	return true;
 }
 
-function setupCanvas(id) {
-	var canvas = document.getElementById(id);
-	var div = document.createElement("div");
-	div.innerHTML = " joe drew";
-	canvas.parentNode.insertBefore(div, canvas);
-	canvas.style.cursor="crosshair"
-	canvas.onmousemove = function (evt) {
-		div.innerHTML = "" + (canvas.offsetLeft) + ", " + (canvas.offsetTop);
-		div.innerHTML = "" + (evt.pageX) + ", " + (evt.pageY);
-		div.innerHTML = "" + (evt.pageX - canvas.offsetLeft) + ", " + (evt.pageY - canvas.offsetTop);
-	}
-}

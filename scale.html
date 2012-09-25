@@ -1,0 +1,49 @@
+<script src="main.js"></script>
+<script src="scale.js"></script>
+<script>
+function scale() {
+	var canvas1 = document.getElementById("canvas1");
+	var canvasdiff = document.getElementById("canvasout");
+	var ctx1 = canvas1.getContext("2d");
+	var ctxdiff = canvasdiff.getContext("2d");
+	start = new Date();
+	imageData1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
+	var resultWidth = canvasdiff.width, resultHeight = canvasdiff.height;
+	diffData = ctxdiff.createImageData(canvasdiff.width, canvasdiff.height);
+	var heapSrc=Module._malloc(canvas1.width*canvas1.height*4);
+	var heapDst=Module._malloc(resultWidth*resultHeight*4);
+
+	var HEAP8 = Module.HEAP8;
+	var HEAPU8 = Module.HEAPU8;
+
+	emStart = new Date();
+	// copy over data to heap
+	var totalSize = canvas1.height*canvas1.width*4;
+	for (var i=0; i<totalSize; i++) {
+		HEAP8[heapSrc + i] = imageData1[i];
+	}
+	scaleStart = new Date();
+	Module._Scale(heapSrc, canvas1.width, canvas1.height, heapDst, resultWidth, resultHeight);
+	scaleEnd = new Date();
+	var resultSize = resultHeight * resultWidth*4;
+	var newData = diffData.data;
+	for (var i=0; i<resultSize; i++) {
+		newData[i] = HEAPU8[(heapDst + i)|0];
+	}
+	emEnd = new Date()
+
+	ctxdiff.putImageData(diffData, 0, 0);
+	end = new Date();
+	alert("Took: " + (end - start));
+}
+</script>
+
+<input type="file" id="input" onchange="handleFiles(this.files, 1)"/>
+<button onclick="scale()">scale</button>
+<div id="view">
+<canvas style="border:solid" width="2000" height="1328" id="canvasout">
+</canvas>
+<canvas width="640" height="480" id="canvas1">
+</canvas>
+<br>
+</div>
