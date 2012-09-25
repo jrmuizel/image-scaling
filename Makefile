@@ -13,7 +13,7 @@ scale: skia/SkBitmap.o skia/SkMallocPixelRef.o skia/Sk64.o skia/SkUnPreMultiply.
 
 scale.js: skia/SkBitmap.o skia/SkMallocPixelRef.o skia/Sk64.o skia/SkUnPreMultiply.o skia/SkPixelRef.o scale.o convolver.o image_operations.o
 	$(EMCC) $(LDFLAGS) $^ -o scale.bc
-	$(EMCC) -o scale.js scale.bc -s TOTAL_MEMORY=100000000 -O2 -s DISABLE_EXCEPTION_CATCHING=1 -s EXPORTED_FUNCTIONS="['_malloc','_Scale']"
+	$(EMCC) -o scale.js scale.bc -s TOTAL_MEMORY=100000000 -O2 -s DISABLE_EXCEPTION_CATCHING=1 --closure 0 -s EXPORTED_FUNCTIONS="['_malloc','_Scale']"
 
 clean:
 	rm *.bc skia/*.o *.o
